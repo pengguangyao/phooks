@@ -1,0 +1,25 @@
+{
+  "name": "phooks",
+  "version": "1.0.4",
+  "description": "custome react hooks",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "hooks",
+    "hook",
+    "typescript"
+  ],
+  "author": "pengguangyao",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^17.0.37",
+    "react": "^17.0.2",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.11"
+  }
+}
