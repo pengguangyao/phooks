@@ -1,9 +1,8 @@
 {
   "name": "phooks",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "custome react hooks",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
@@ -21,5 +20,9 @@
   },
   "dependencies": {
     "@types/node": "^16.11.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:pengguangyao/phooks.git"
   }
 }
