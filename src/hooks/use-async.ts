@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useCallback, useReducer} from 'react';
+import {useMountRef} from './index';
 
 interface State<T>{
     data: T | null,
@@ -6,43 +7,87 @@ interface State<T>{
     stat: 'idle' | 'loading' | 'error' | 'success',
 }
 
-const initState: State<any> = {
+const initState: State<null> = {
     data: null,
     error: null,
     stat: 'idle',
 }
 
+const SUC = 'success';
+const EOR = 'error';
+const LOD = 'loading'
+
+type Action = {
+    type: typeof SUC | typeof EOR | typeof LOD,
+    payload?: unknown,
+}
+
+function asyncReducer<D>(state: State<D>, action: Action): State<D>{
+    const {payload, type} = action;
+    switch(type){
+        case SUC: {
+            return {
+                data: payload as D,
+                error: null,
+                stat: SUC,
+            }
+        }
+        case EOR: {
+            return {
+                data: null,
+                error: payload as Error,
+                stat: EOR,
+            }
+        }
+        case LOD: {
+            return {
+                data: null,
+                error: null,
+                stat: LOD,
+            }
+        }
+        default: 
+            return state;
+    }
+}
+
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+    const mountRef = useMountRef();
+    const safeDispatch = useCallback((...args: T[]) => {
+        mountRef.current ? dispatch(...args) : void 0;
+    }, [dispatch]);
+    return safeDispatch;
+}
+
 const useAsync = <D>() => {
-    const [state, setState] = useState(initState);
+    const [state, dispatch] = useReducer(asyncReducer , initState);
+
+    const safeDispatch = useSafeDispatch(dispatch);
 
     // 数据请求成功
-    const setData = (data: D) => {
-        setState({
-            data: data,
-            error: null,
-            stat: 'success',
-        })
-    }
+    const setData = useCallback((data: D) => {
+        safeDispatch({
+            type: SUC,
+            payload: data,
+        });
+    }, [safeDispatch])
 
     // 数据请求错误
-    const setError = (error: Error) => {
-        setState({
-            data: null,
-            error: error,
-            stat: 'error'
+    const setError = useCallback((error: Error) => {
+        safeDispatch({
+            type: EOR,
+            payload: error,
         })
-    }
+    }, [safeDispatch])
 
     // 运行函数，返回promise
-    const run = (promise: Promise<any>) => {
+    const run = useCallback((promise: Promise<any>) => {
         if(!promise || !promise.then){
             throw Error('传入的参数类型不是Promise');
         }
         // 打开请求状态
-        setState({
-            data: null,
-            error: null,
-            stat: 'loading',
+        safeDispatch({
+            type: LOD,
         })
 
         return Promise.resolve(promise).then((data: D) => {
@@ -52,7 +97,7 @@ const useAsync = <D>() => {
             setError(error);
             return Promise.reject(error);
         })
-    }
+    }, [safeDispatch])
 
     const {data, error, stat} = state;
 
