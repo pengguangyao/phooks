@@ -81,7 +81,7 @@ const useAsync = <D>() => {
     }, [safeDispatch])
 
     // 运行函数，返回promise
-    const run = useCallback((promise: Promise<any>) => {
+    const run = useCallback((promise: Promise<any>): Promise<any> => {
         if(!promise || !promise.then){
             throw Error('传入的参数类型不是Promise');
         }
