@@ -3,7 +3,7 @@ import useMount from './hooks/use-mount';
 import useUnmount from './hooks/use-unmount';
 import useDebounce from './hooks/use-debounce';
 
-import * as util from './utils';
+import util from './utils';
 
 export default {
     useAsync,
