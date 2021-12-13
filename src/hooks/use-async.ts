@@ -19,7 +19,7 @@ const LOD = 'loading'
 
 type Action = {
     type: typeof SUC | typeof EOR | typeof LOD,
-    payload?: unknown,
+    payload?: any,
 }
 
 function asyncReducer<D>(state: State<D>, action: Action): State<D>{
