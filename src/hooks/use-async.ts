@@ -24,34 +24,34 @@ type Action<D> = {
 
 
 
-function asyncReducer<D>(state: State<D>, action: Action<D>): State<D>{
-    const {payload, type} = action;
-    switch(type){
-        case SUC: {
-            return {
-                data: payload as D,
-                error: null,
-                stat: SUC,
-            }
-        }
-        case EOR: {
-            return {
-                data: null,
-                error: payload as Error,
-                stat: EOR,
-            }
-        }
-        case LOD: {
-            return {
-                data: null,
-                error: null,
-                stat: LOD,
-            }
-        }
-        default: 
-            return state;
-    }
-}
+// function asyncReducer<D>(state: State<D>, action: Action<D>): State<D>{
+//     const {payload, type} = action;
+//     switch(type){
+//         case SUC: {
+//             return {
+//                 data: payload as D,
+//                 error: null,
+//                 stat: SUC,
+//             }
+//         }
+//         case EOR: {
+//             return {
+//                 data: null,
+//                 error: payload as Error,
+//                 stat: EOR,
+//             }
+//         }
+//         case LOD: {
+//             return {
+//                 data: null,
+//                 error: null,
+//                 stat: LOD,
+//             }
+//         }
+//         default: 
+//             return state;
+//     }
+// }
 
 const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
     const mountRef = useMountRef();
