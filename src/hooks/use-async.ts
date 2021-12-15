@@ -7,7 +7,7 @@ interface State<T>{
     stat: 'idle' | 'loading' | 'error' | 'success',
 }
 
-const initState: State<null> = {
+const initState = {
     data: null,
     error: null,
     stat: 'idle',
@@ -17,12 +17,14 @@ const SUC = 'success';
 const EOR = 'error';
 const LOD = 'loading'
 
-type Action = {
+type Action<D> = {
     type: typeof SUC | typeof EOR | typeof LOD,
-    payload?: any,
+    payload?: D | Error | null | undefined,
 }
 
-function asyncReducer<D>(state: State<D>, action: Action): State<D>{
+
+
+function asyncReducer<D>(state: State<D>, action: Action<D>): State<D>{
     const {payload, type} = action;
     switch(type){
         case SUC: {
@@ -60,7 +62,37 @@ const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
 }
 
 const useAsync = <D>() => {
-    const [state, dispatch] = useReducer(asyncReducer , initState);
+    const [state, dispatch] = useReducer(
+        (state: State<D>, action: Action<D>): State<D> => {
+            const {payload, type} = action;
+            switch(type){
+                case SUC: {
+                    return {
+                        data: payload as D,
+                        error: null,
+                        stat: SUC,
+                    }
+                }
+                case EOR: {
+                    return {
+                        data: null,
+                        error: payload as Error,
+                        stat: EOR,
+                    }
+                }
+                case LOD: {
+                    return {
+                        data: null,
+                        error: null,
+                        stat: LOD,
+                    }
+                }
+                default: 
+                    return state;
+            }
+         }
+         , initState as State<D>
+    );
 
     const safeDispatch = useSafeDispatch(dispatch);
 
@@ -110,7 +142,7 @@ const useAsync = <D>() => {
         run,
         setData,
         setError,
-    }
+    } as const
 }
 
 export default useAsync;
