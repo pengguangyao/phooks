@@ -3,6 +3,8 @@ import useMount from './hooks/use-mount';
 import useUnmount from './hooks/use-unmount';
 import useDebounceVal from './hooks/use-debounce-value';
 
+import * as other from './hooks/index';
+
 import * as util from './utils';
 
 export default {
@@ -11,4 +13,5 @@ export default {
     useUnmount,
     useDebounceVal,
     ...util,
+    ...other,
 }
