@@ -11,6 +11,6 @@ export default {
     useMount,
     useUnmount,
     useDebounceVal,
-    useMountRef
-    ...util,
+    useMountRef,
+    ...util
 }
