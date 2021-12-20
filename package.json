@@ -4,7 +4,8 @@
   "description": "custome react hooks",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "nodemon --ignore dist/ --ignore node_modules/ --watch src/ -C -e ts,tsx,less --exec 'npm run build'"
   },
   "keywords": [
     "hooks",
