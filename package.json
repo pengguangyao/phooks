@@ -1,11 +1,10 @@
 {
   "name": "phooks",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "custome react hooks",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "nodemon --ignore dist/ --ignore node_modules/ --watch src/ -C -e ts,tsx,less --exec 'npm run build'"
+    "build": "tsc"
   },
   "keywords": [
     "hooks",
