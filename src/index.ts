@@ -14,5 +14,5 @@ export default {
     useDebounceVal,
     useMountRef,
     useInterval,
-    ...util
-}
+    ...util,
+};

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     // root: true,
     plugins: ['react', 'babel', 'jest', '@typescript-eslint', 'react-hooks', 'prettier'],
     parserOptions: {
