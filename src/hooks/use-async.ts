@@ -1,27 +1,25 @@
-import {useCallback, useReducer} from 'react';
+import { useCallback, useReducer } from 'react';
 import useMountRef from './use-mount-ref';
-interface State<T>{
-    data: T | null,
-    error: Error | null,
-    stat: 'idle' | 'loading' | 'error' | 'success',
+interface State<T> {
+    data: T | null;
+    error: Error | null;
+    stat: 'idle' | 'loading' | 'error' | 'success';
 }
 
 const initState = {
     data: null,
     error: null,
     stat: 'idle',
-}
+};
 
 const SUC = 'success';
 const EOR = 'error';
-const LOD = 'loading'
+const LOD = 'loading';
 
 type Action<D> = {
-    type: typeof SUC | typeof EOR | typeof LOD,
-    payload?: D | Error | null | undefined,
-}
-
-
+    type: typeof SUC | typeof EOR | typeof LOD;
+    payload?: D | Error | null | undefined;
+};
 
 // function asyncReducer<D>(state: State<D>, action: Action<D>): State<D>{
 //     const {payload, type} = action;
@@ -47,90 +45,101 @@ type Action<D> = {
 //                 stat: LOD,
 //             }
 //         }
-//         default: 
+//         default:
 //             return state;
 //     }
 // }
 
 const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
     const mountRef = useMountRef();
-    const safeDispatch = useCallback((...args: T[]) => {
-        mountRef.current ? dispatch(...args) : void 0;
-    }, [dispatch]);
+    const safeDispatch = useCallback(
+        (...args: T[]) => {
+            mountRef.current ? dispatch(...args) : void 0;
+        },
+        [dispatch],
+    );
     return safeDispatch;
-}
+};
 
 const useAsync = <D>() => {
-    const [state, dispatch] = useReducer(
-        (state: State<D>, action: Action<D>): State<D> => {
-            const {payload, type} = action;
-            switch(type){
-                case SUC: {
-                    return {
-                        data: payload as D,
-                        error: null,
-                        stat: SUC,
-                    }
-                }
-                case EOR: {
-                    return {
-                        data: null,
-                        error: payload as Error,
-                        stat: EOR,
-                    }
-                }
-                case LOD: {
-                    return {
-                        data: null,
-                        error: null,
-                        stat: LOD,
-                    }
-                }
-                default: 
-                    return state;
+    const [state, dispatch] = useReducer((state: State<D>, action: Action<D>): State<D> => {
+        const { payload, type } = action;
+        switch (type) {
+            case SUC: {
+                return {
+                    data: payload as D,
+                    error: null,
+                    stat: SUC,
+                };
             }
-         }
-         , initState as State<D>
-    );
+            case EOR: {
+                return {
+                    data: null,
+                    error: payload as Error,
+                    stat: EOR,
+                };
+            }
+            case LOD: {
+                return {
+                    data: null,
+                    error: null,
+                    stat: LOD,
+                };
+            }
+            default:
+                return state;
+        }
+    }, initState as State<D>);
 
     const safeDispatch = useSafeDispatch(dispatch);
 
     // 数据请求成功
-    const setData = useCallback((data: D) => {
-        safeDispatch({
-            type: SUC,
-            payload: data,
-        });
-    }, [safeDispatch])
+    const setData = useCallback(
+        (data: D) => {
+            safeDispatch({
+                type: SUC,
+                payload: data,
+            });
+        },
+        [safeDispatch],
+    );
 
     // 数据请求错误
-    const setError = useCallback((error: Error) => {
-        safeDispatch({
-            type: EOR,
-            payload: error,
-        })
-    }, [safeDispatch])
+    const setError = useCallback(
+        (error: Error) => {
+            safeDispatch({
+                type: EOR,
+                payload: error,
+            });
+        },
+        [safeDispatch],
+    );
 
     // 运行函数，返回promise
-    const run = useCallback((promise: Promise<any>): Promise<any> => {
-        if(!promise || !promise.then){
-            throw Error('传入的参数类型不是Promise');
-        }
-        // 打开请求状态
-        safeDispatch({
-            type: LOD,
-        })
+    const run = useCallback(
+        (promise: Promise<any>): Promise<any> => {
+            if (!promise || !promise.then) {
+                throw Error('传入的参数类型不是Promise');
+            }
+            // 打开请求状态
+            safeDispatch({
+                type: LOD,
+            });
 
-        return Promise.resolve(promise).then((data: D) => {
-            setData(data);
-            return data;
-        }).catch((error: Error) => {
-            setError(error);
-            return Promise.reject(error);
-        })
-    }, [safeDispatch])
+            return Promise.resolve(promise)
+                .then((data: D) => {
+                    setData(data);
+                    return data;
+                })
+                .catch((error: Error) => {
+                    setError(error);
+                    return Promise.reject(error);
+                });
+        },
+        [safeDispatch],
+    );
 
-    const {data, error, stat} = state;
+    const { data, error, stat } = state;
 
     return {
         isError: stat === 'error',
@@ -141,7 +150,7 @@ const useAsync = <D>() => {
         run,
         setData,
         setError,
-    } as const
-}
+    } as const;
+};
 
 export default useAsync;
