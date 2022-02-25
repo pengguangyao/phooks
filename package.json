@@ -1,20 +1,10 @@
 {
     "name": "phooks",
-    "version": "1.0.25",
+    "version": "1.0.26",
     "description": "custome react hooks",
     "main": "./dist/index.js",
     "scripts": {
-        "build": "tsc",
-        "precommit": "lint-staged",
-        "prepare": "husky install"
-    },
-    "lint-staged": {
-        "*src/**/*.{js, jsx}": [
-            "eslint --fix"
-        ],
-        "*src/**/*.{ts, tsx}": [
-            "tslint --fix"
-        ]
+        "build": "tsc"
     },
     "keywords": [
         "hooks",
@@ -25,21 +15,7 @@
     "license": "ISC",
     "devDependencies": {
         "@types/react": "^17.0.37",
-        "@typescript-eslint/eslint-plugin": "^5.12.1",
-        "babel-eslint": "^10.1.0",
-        "eslint": "7.32.0",
-        "eslint-config-prettier": "^8.4.0",
-        "eslint-plugin-babel": "^5.3.1",
-        "eslint-plugin-jest": "^26.1.1",
-        "eslint-plugin-prettier": "^4.0.0",
-        "eslint-plugin-react": "^7.28.0",
-        "eslint-plugin-react-hooks": "^4.3.0",
-        "husky": "^7.0.4",
-        "lint-staged": "^12.3.4",
-        "prettier": "^2.5.1",
         "react": "^17.0.2",
-        "tslint-config-airbnb-base": "^0.3.0",
-        "tslint-react": "^5.0.0",
         "typescript": "^4.5.2"
     },
     "dependencies": {
