@@ -1,6 +1,6 @@
 {
     "name": "phooks",
-    "version": "1.0.23",
+    "version": "1.0.24",
     "description": "custome react hooks",
     "main": "./dist/index.js",
     "scripts": {
